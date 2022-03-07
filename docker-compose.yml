@@ -1,0 +1,19 @@
+version: "3"
+services:
+  grafana:
+    container_name: stats-grafana
+    image: grafana/grafana
+    networks:
+      - stats
+    ports:
+      - 3000:3000
+    volumes:
+      - stats_grafana_data:/var/lib/grafana
+      - ./grafana/datasources:/etc/grafana/provisioning/datasources
+      - ./grafana/dashboards:/etc/grafana/provisioning/dashboards
+
+networks:
+  stats:
+
+volumes:
+  stats_grafana_data: {}

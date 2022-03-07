@@ -1,0 +1,18 @@
+version: "3"
+services:
+  grafana:
+    depends_on:
+      - influxdb
+  influxdb:
+    container_name: stats-influxdb
+    image: influxdb
+    networks:
+      - stats
+    ports:
+      - 8086:8086
+    restart: always
+    volumes:
+      - stats_influxdb_data:/var/lib/influxdb
+
+volumes:
+  stats_influxdb_data: {}

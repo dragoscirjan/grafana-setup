@@ -1,0 +1,23 @@
+version: "3"
+services:
+  grafana:
+    depends_on:
+      - graphite
+
+  graphite:
+    image: graphiteapp/graphite-statsd
+    container_name: stats-graphite
+    networks:
+      - stats
+    ports:
+      - "8080:80"
+      - "2003-2004:2003-2004"
+      - "2023-2024:2023-2024"
+      - "8125:8125/udp"
+      - "8126:8126"
+    volumes:
+      - stats_graphite_data:/opt/graphite/storage
+      - ./log/graphite:/var/log/graphite
+
+volumes:
+  stats_graphite_data: {}

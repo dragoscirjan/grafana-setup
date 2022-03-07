@@ -1,0 +1,32 @@
+version: "3"
+
+services:
+  mosquitto:
+    image: eclipse-mosquitto:1.5
+    container_name: stats-mosquitto
+    networks:
+      - stats
+    ports:
+      - 1883:1883
+      - 9001:9001
+    # volumes:
+    #   - ./mosquitto/mosquitto.conf:/mosquitto/config/mosquitto.conf
+    #   - ./mosquitto/users:/mosquitto/config/users
+    #   - stats_mosquitto_data:/mosquitto/data
+    #   - ./log/mosquitto:/mosquitto/log
+    restart: always
+
+  mosquitto-telegraf:
+    container_name: stats-mosquitto-telegraf
+    depends_on:
+      - mosquitto
+      - influxdb
+    image: telegraf
+    networks:
+      - stats
+    restart: always
+    volumes:
+      - ./telegraf/telegraf.conf:/etc/telegraf/telegraf.conf:ro
+
+volumes:
+  stats_mosquitto_data: {}

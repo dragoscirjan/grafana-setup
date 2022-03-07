@@ -38,5 +38,15 @@ services:
     labels:
       org.label-schema.group: "monitoring"
 
+  prometheus-pushgateway:
+    container_name: stats-prometheus-pushgateway
+    image: prom/pushgateway
+    networks:
+      - stats
+    ports:
+      - 9091:9091
+    restart: unless-stopped
+
+
 volumes:
     prometheus_data: {}

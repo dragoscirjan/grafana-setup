@@ -66,4 +66,4 @@ up-rpi2: prep
 	docker-compose -f docker-compose.prometheus-exporter-rpi2.yml up -d
 
 up-rpi4: prep
-	docker-compose -f docker-compose.yml -f docker-compose.influxdb.yml -f docker-compose.prometheus.yml -f docker-compose.prometheus-exporter.yml up -d
+	docker-compose -f docker-compose.yml -f docker-compose.prometheus.yml -f docker-compose.prometheus-exporter.yml up -d

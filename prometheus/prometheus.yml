@@ -25,6 +25,10 @@ scrape_configs:
     scrape_interval: 5s
     static_configs:
       - targets: ["stats-prometheus-pushgateway:9091"]
+  - job_name: "prometheus-nodeexporter"
+    scrape_interval: 5s
+    static_configs:
+      - targets: ["stats-prometheus-nodeexporter:9100"]
 
 alerting:
   alertmanagers:

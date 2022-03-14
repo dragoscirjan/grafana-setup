@@ -1,0 +1,27 @@
+version: "3"
+
+services:
+  prometheus:
+    depends_on:
+      - prometheus-nodeexporter
+
+  prometheus-nodeexporter:
+    command:
+      - "--path.procfs=/host/proc"
+      - "--path.rootfs=/rootfs"
+      - "--path.sysfs=/host/sys"
+      - "--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)"
+    container_name: stats-prometheus-nodeexporter
+    image: prom/node-exporter
+    networks:
+      - stats
+    ports:
+      - 9100:9100
+    restart: unless-stopped
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+
+volumes:
+  prometheus_data: {}

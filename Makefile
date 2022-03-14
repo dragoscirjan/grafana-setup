@@ -52,14 +52,18 @@ up-mqtt: prep
 	docker-compose -f docker-compose.yml -f docker-compose.influx.yml -f docker-compose.mosquitto.yml up -d
 
 up-prom: prep
-	docker-compose -f docker-compose.yml -f docker-compose.prometheus.yml up -d
+	docker-compose -f docker-compose.yml -f docker-compose.prometheus.yml \
+		-f docker-compose.prometheus-exporter.yml up -d
 
 up-graphite-prom: prep
 	docker-compose -f docker-compose.yml -f docker-compose.prometheus.yml -f docker-compose.graphite.yml \
-		-f docker-compose.graphite-prometheus.yml up -d
+		-f docker-compose.prometheus-exporter.yml -f docker-compose.graphite-prometheus.yml up -d
 
 
 # used by me
 
+up-rpi2: prep
+	docker-compose -f docker-compose.prometheus-exporter.yml up -d
+
 up-rpi4: prep
-	docker-compose -f docker-compose.yml -f docker-compose.prometheus.yml up -d
+	docker-compose -f docker-compose.yml -f docker-compose.prometheus.yml -f docker-compose.prometheus-exporter.yml up -d

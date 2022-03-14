@@ -1,15 +1,18 @@
-version: '3'
+version: "3"
 
 services:
   prometheus:
     command:
-      - '--config.file=/etc/prometheus/prometheus.yml'
-      - '--storage.tsdb.path=/prometheus'
-      - '--web.console.libraries=/etc/prometheus/console_libraries'
-      - '--web.console.templates=/etc/prometheus/consoles'
-      - '--storage.tsdb.retention.time=200h'
-      - '--web.enable-lifecycle'
+      - "--config.file=/etc/prometheus/prometheus.yml"
+      - "--storage.tsdb.path=/prometheus"
+      - "--web.console.libraries=/etc/prometheus/console_libraries"
+      - "--web.console.templates=/etc/prometheus/consoles"
+      - "--storage.tsdb.retention.time=200h"
+      - "--web.enable-lifecycle"
     container_name: stats-prometheus
+    depends_on:
+      - prometheus-alertmanager
+      - prometheus-pushgateway
     image: prom/prometheus:v2.12.0
     labels:
       org.label-schema.group: "monitoring"
@@ -28,8 +31,8 @@ services:
     volumes:
       - ./alertmanager/:/etc/alertmanager/
     command:
-      - '--config.file=/etc/alertmanager/config.yml'
-      - '--storage.path=/alertmanager'
+      - "--config.file=/etc/alertmanager/config.yml"
+      - "--storage.path=/alertmanager"
     networks:
       - stats
     ports:
@@ -47,6 +50,5 @@ services:
       - 9091:9091
     restart: unless-stopped
 
-
 volumes:
-    prometheus_data: {}
+  prometheus_data: {}

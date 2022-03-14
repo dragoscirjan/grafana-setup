@@ -1,9 +1,9 @@
 version: "3"
 
 services:
-  prometheus:
-    depends_on:
-      - prometheus-nodeexporter
+  # prometheus:
+  #   depends_on:
+  #     - prometheus-nodeexporter
 
   prometheus-nodeexporter:
     command:

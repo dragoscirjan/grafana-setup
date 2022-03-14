@@ -26,7 +26,7 @@ up: prep pull
 		-f docker-compose.yml \
 		-f docker-compose.graphite.yml \
 		-f docker-compose.prometheus.yml \
-		-f docker-compose.influx.yml \
+		-f docker-compose.influxdb.yml \
 		-f docker-compose.mosquitto.yml \
 		up -d
 
@@ -45,11 +45,11 @@ tail:
 up-graphite: prep
 	docker-compose -f docker-compose.yml -f docker-compose.graphite.yml up -d
 
-up-influx: prep
-	docker-compose -f docker-compose.yml -f docker-compose.influx.yml up -d
+up-influxdb: prep
+	docker-compose -f docker-compose.yml -f docker-compose.influxdb.yml up -d
 
 up-mqtt: prep
-	docker-compose -f docker-compose.yml -f docker-compose.influx.yml -f docker-compose.mosquitto.yml up -d
+	docker-compose -f docker-compose.yml -f docker-compose.influxdb.yml -f docker-compose.mosquitto.yml up -d
 
 up-prom: prep
 	docker-compose -f docker-compose.yml -f docker-compose.prometheus.yml \
@@ -66,4 +66,4 @@ up-rpi2: prep
 	docker-compose -f docker-compose.prometheus-exporter-rpi2.yml up -d
 
 up-rpi4: prep
-	docker-compose -f docker-compose.yml -f docker-compose.prometheus.yml -f docker-compose.prometheus-exporter.yml up -d
+	docker-compose -f docker-compose.yml -f docker-compose.influxdb.yml -f docker-compose.prometheus.yml -f docker-compose.prometheus-exporter.yml up -d

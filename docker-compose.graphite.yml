@@ -15,6 +15,7 @@ services:
       - "2023-2024:2023-2024"
       - "8125:8125/udp"
       - "8126:8126"
+    restart: unless-stopped
     volumes:
       - stats_graphite_data:/opt/graphite/storage
       - ./log/graphite:/var/log/graphite

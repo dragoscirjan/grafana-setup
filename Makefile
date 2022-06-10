@@ -1,17 +1,16 @@
+include Makefile.template
+
 # docker-grafana-graphite makefile
 
-.PHONY: up
-
-clean-containers: 
+clean-containers:
 	docker ps -a | grep stats- | awk -F ' ' '{ print $$1 }' | xargs docker rm -f || true
 
 clean-volumes:
 	docker volume ls | grep stats_ | awk -F ' ' '{ print $$2 }' | xargs docker volume rm -f || true
 
-clean: clean-containers clean-volumes
+clean: clean-containers clean-volumes ## Clean Grafana Suite
 	docker image ls -qa | xargs docker image rm -f || true
 	
-
 prep: clean-containers
 	mkdir -p \
 		log/graphite \
@@ -21,7 +20,7 @@ prep: clean-containers
 pull:
 	docker-compose pull
 
-up: prep pull
+up: prep pull ## Raise Default Grafana Suite
 	docker-compose \
 		-f docker-compose.yml \
 		-f docker-compose.graphite.yml \
@@ -30,7 +29,7 @@ up: prep pull
 		-f docker-compose.mosquitto.yml \
 		up -d
 
-down:
+down: ## Down Default Grafana Suite
 	docker-compose -f docker-compose-prom.yml -f docker-compose.yml down
 
 shell:
@@ -42,28 +41,31 @@ tail:
 # demo
 
 
-up-graphite: prep
+up-graphite: prep ## Raise Graphite 
 	docker-compose -f docker-compose.yml -f docker-compose.graphite.yml up -d
 
-up-influxdb: prep
+up-influxdb: prep ## Raise Influxdb
 	docker-compose -f docker-compose.yml -f docker-compose.influxdb.yml up -d
 
-up-mqtt: prep
+up-mqtt: prep ## Raise MQTT
 	docker-compose -f docker-compose.yml -f docker-compose.influxdb.yml -f docker-compose.mosquitto.yml up -d
 
-up-prom: prep
+up-prom: prep ## Raise Prometheus
 	docker-compose -f docker-compose.yml -f docker-compose.prometheus.yml \
 		-f docker-compose.prometheus-exporter.yml up -d
 
-up-graphite-prom: prep
+up-graphite-prom: prep ## Raise Graphite + Prometheus
 	docker-compose -f docker-compose.yml -f docker-compose.prometheus.yml -f docker-compose.graphite.yml \
 		-f docker-compose.prometheus-exporter.yml -f docker-compose.graphite-prometheus.yml up -d
 
 
 # used by me
 
-up-rpi2: prep
+up-rpi2: prep ## Raise rpi2.local 
 	docker-compose -f docker-compose.prometheus-exporter-rpi2.yml up -d
 
-up-rpi4: prep
+up-rpi4: prep ## Raise rpi4.local
 	docker-compose -f docker-compose.yml -f docker-compose.prometheus.yml -f docker-compose.prometheus-exporter.yml up -d
+
+up-acsstats01: ## Raise pt-acsstats01
+	docker-compose -f docker-compose.yml -f docker-compose.prometheus.yml -f docker-compose.prometheus-exporter.yml up -d	

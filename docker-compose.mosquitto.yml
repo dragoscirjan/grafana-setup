@@ -14,7 +14,7 @@ services:
     #   - ./mosquitto/users:/mosquitto/config/users
     #   - stats_mosquitto_data:/mosquitto/data
     #   - ./log/mosquitto:/mosquitto/log
-    restart: always
+    restart: unless-stopped
 
   mosquitto-telegraf:
     container_name: stats-mosquitto-telegraf
@@ -24,7 +24,7 @@ services:
     image: telegraf
     networks:
       - stats
-    restart: always
+    restart: unless-stopped
     volumes:
       - ./telegraf/telegraf.conf:/etc/telegraf/telegraf.conf:ro
 

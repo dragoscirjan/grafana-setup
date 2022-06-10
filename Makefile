@@ -66,6 +66,3 @@ up-rpi2: prep ## Raise rpi2.local
 
 up-rpi4: prep ## Raise rpi4.local
 	docker-compose -f docker-compose.yml -f docker-compose.prometheus.yml -f docker-compose.prometheus-exporter.yml up -d
-
-up-acsstats01: ## Raise pt-acsstats01
-	docker-compose -f docker-compose.yml -f docker-compose.prometheus.yml -f docker-compose.prometheus-exporter.yml up -d	

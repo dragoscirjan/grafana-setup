@@ -1,5 +1,7 @@
 include Makefile.template
 
+DOCKER_COMPOSE=$(shell if test $$(which docker-compose); then echo "docker-compose"; else echo "docker compose"; fi)
+
 # docker-grafana-graphite makefile
 
 clean-containers:
@@ -18,10 +20,10 @@ prep: clean-containers
 		log/mosquitto
 
 pull:
-	docker-compose pull
+	$(DOCKER_COMPOSE) pull
 
 up: prep pull ## Raise Default Grafana Suite
-	docker-compose \
+	$(DOCKER_COMPOSE) \
 		-f docker-compose.yml \
 		-f docker-compose.graphite.yml \
 		-f docker-compose.prometheus.yml \
@@ -30,7 +32,7 @@ up: prep pull ## Raise Default Grafana Suite
 		up -d
 
 down: ## Down Default Grafana Suite
-	docker-compose -f docker-compose-prom.yml -f docker-compose.yml down
+	$(DOCKER_COMPOSE) -f docker-compose-prom.yml -f docker-compose.yml down
 
 shell:
 	docker exec -ti $(CONTAINER) /bin/sh
@@ -42,27 +44,27 @@ tail:
 
 
 up-graphite: prep ## Raise Graphite 
-	docker-compose -f docker-compose.yml -f docker-compose.graphite.yml up -d
+	$(DOCKER_COMPOSE) -f docker-compose.yml -f docker-compose.graphite.yml up -d
 
 up-influxdb: prep ## Raise Influxdb
-	docker-compose -f docker-compose.yml -f docker-compose.influxdb.yml up -d
+	$(DOCKER_COMPOSE) -f docker-compose.yml -f docker-compose.influxdb.yml up -d
 
 up-mqtt: prep ## Raise MQTT
-	docker-compose -f docker-compose.yml -f docker-compose.influxdb.yml -f docker-compose.mosquitto.yml up -d
+	$(DOCKER_COMPOSE) -f docker-compose.yml -f docker-compose.influxdb.yml -f docker-compose.mosquitto.yml up -d
 
 up-prom: prep ## Raise Prometheus
-	docker-compose -f docker-compose.yml -f docker-compose.prometheus.yml \
+	$(DOCKER_COMPOSE) -f docker-compose.yml -f docker-compose.prometheus.yml \
 		-f docker-compose.prometheus-exporter.yml up -d
 
 up-graphite-prom: prep ## Raise Graphite + Prometheus
-	docker-compose -f docker-compose.yml -f docker-compose.prometheus.yml -f docker-compose.graphite.yml \
+	$(DOCKER_COMPOSE) -f docker-compose.yml -f docker-compose.prometheus.yml -f docker-compose.graphite.yml \
 		-f docker-compose.prometheus-exporter.yml -f docker-compose.graphite-prometheus.yml up -d
 
 
 # used by me
 
 up-rpi2: prep ## Raise rpi2.local 
-	docker-compose -f docker-compose.prometheus-exporter-rpi2.yml up -d
+	$(DOCKER_COMPOSE) -f docker-compose.prometheus-exporter-rpi2.yml up -d
 
 up-rpi4: prep ## Raise rpi4.local
-	docker-compose -f docker-compose.yml -f docker-compose.prometheus.yml -f docker-compose.prometheus-exporter.yml up -d
+	$(DOCKER_COMPOSE) -f docker-compose.yml -f docker-compose.prometheus.yml -f docker-compose.prometheus-exporter.yml up -d

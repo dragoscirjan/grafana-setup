@@ -6,6 +6,7 @@
 - [Grafana Setup](#grafana-setup)
   - [Getting Started](#getting-started)
   - [Graphana + Prometheus](#graphana--prometheus)
+    - [Monitoring Windows OS](#monitoring-windows-os)
   - [About project](#about-project)
 
 <!-- /TOC -->
@@ -40,6 +41,33 @@ make up-prom
 docker-compose -f docker-compose.yml -f docker-compose.prometheus.yml up -d
 ```
 
+### Monitoring Windows OS
+
+_`$job` is a variable representing the prometheus jobs. you can replace it with instances or whatever you need_
+
+*Monitoring CPU*
+
+* Cpu Usage: `sum by(mode) (irate(windows_cpu_time_total{job="$job"}[5m]))`
+* Usage %: `100 - (avg by (instance) (irate(windows_cpu_time_total{mode="idle", job="$job"}[1m])) * 100)`
+* Threads: `windows_system_threads{job="$job"}`
+
+*Monitoring Memory*
+
+* Virtual: `windows_os_virtual_memory_bytes{job="$job"} - windows_os_virtual_memory_free_bytes{job="$job"}`
+* Physical: `windows_cs_physical_memory_bytes{job="$job"} - windows_os_physical_memory_free_bytes{job="$job"}`
+* Virtual %: `(windows_os_virtual_memory_bytes{job="$job"} - windows_os_virtual_memory_free_bytes{job="$job"}) / windows_os_virtual_memory_bytes{job="$job"} * 100`
+* Physical %: `(windows_cs_physical_memory_bytes{job="$job"} - windows_os_physical_memory_free_bytes{job="$job"}) / windows_cs_physical_memory_bytes{job="$job"} * 100`
+
+*Monitoring Network*
+
+* Sent Data: `irate(windows_net_bytes_sent_total{job="$job"}[2m])`
+* Received Data: `irate(windows_net_bytes_received_total{job="$job"}[2m])`
+
+*Monitoring Disk*
+
+* Read: `irate(windows_logical_disk_read_bytes_total{job="$job"}[2m])`
+* Write: `irate(windows_logical_disk_write_bytes_total{job="$job"}[2m])`
+
 ## About project
 
 Inpired from:
@@ -47,6 +75,7 @@ Inpired from:
 * https://github.com/myoperator/grafana-graphite-statsd
 * https://github.com/iothon/docker-compose-mqtt-influxdb-grafana
 * https://lucassardois.medium.com/handling-iot-data-with-mqtt-telegraf-influxdb-and-grafana-5a431480217
+* https://linuxhint.com/install-monitor-windows-os-prometheus/
 
 
 
